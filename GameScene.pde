@@ -6,7 +6,7 @@ class GameScene extends Scene {
   Class[] updateOrder = {Base.class, Missile.class, Trail.class, Explosion.class, Enemy.class};
   Class[] renderOrder = {Trail.class, Missile.class, Explosion.class, Base.class, City.class};
   Base[] bs;
-  City[] cs;
+  Enemy e;
   int currentBase = 0;
   
   boolean pause = false;
@@ -24,23 +24,25 @@ class GameScene extends Scene {
     bs[1] = new Base((width-50)/2, height);
     bs[2] = new Base(width-50, height);
     
-    cs = new City[6];
-    cs[0] = new City((width-20)*0.175, height);
-    cs[1] = new City((width-20)*0.275, height);
-    cs[2] = new City((width-20)*0.375, height);
-    cs[3] = new City((width-20)*0.625, height);
-    cs[4] = new City((width-20)*0.725, height);
-    cs[5] = new City((width-20)*0.825, height);
+    if (level==0) {
+      cs = new City[6];
+      cs[0] = new City((width-20)*0.175, height);
+      cs[1] = new City((width-20)*0.275, height);
+      cs[2] = new City((width-20)*0.375, height);
+      cs[3] = new City((width-20)*0.625, height);
+      cs[4] = new City((width-20)*0.725, height);
+      cs[5] = new City((width-20)*0.825, height);
+    }
     
     pScene = new PauseScene(this);
-    
-    objects.add(new Enemy());
+    e = new Enemy(1+level/2, 5+level);
     
     if (scene!=null) scene.exit(); // if there is old scene, let it perform exit action
-    enter();
   }
   
-  void enter() {}
+  void enter() {
+    
+  }
   
   void loop() {
     if (pause) {
@@ -89,10 +91,11 @@ class GameScene extends Scene {
   }
   
   void update() {
-  for (int i = 0; i < updateOrder.length; i++) {
-    Class someClass = updateOrder[i];
-      int size = objects.size() - 1;
-      for (int j = size; j >= 0; j--) {
+    e.update();
+    
+    for (int i = 0; i < updateOrder.length; i++) {
+      Class someClass = updateOrder[i];
+      for (int j = objects.size() - 1; j >= 0; j--) {
         if (objects.get(j).getClass() == someClass) {
           Object o = objects.get(j);
           o.update();
@@ -104,6 +107,13 @@ class GameScene extends Scene {
           }
         }
       }
+    }
+    
+    int missileCount = 0;
+    for (int i=0; i<objects.size(); i++) if (objects.get(i).getClass() == Missile.class) missileCount++;
+    if (e.waveCount < 0 && missileCount <= 0) {
+      level++;
+      scene = new GameScene();
     }
   }
   

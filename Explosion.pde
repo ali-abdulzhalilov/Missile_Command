@@ -27,9 +27,9 @@ class Explosion extends GameObject{
     }
     
     if (doHit) {
-      for (int i=0; i<s.cs.length; i++)
-        if (dist(x, y, s.cs[i].x, s.cs[i].y) < r/2) {
-          s.cs[i].destroyed = true;
+      for (int i=0; i<cs.length; i++)
+        if (dist(x, y, cs[i].x, cs[i].y) < r/2) {
+          cs[i].destroyed = true;
           doHit = false;
         }
     }

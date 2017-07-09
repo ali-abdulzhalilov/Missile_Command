@@ -7,6 +7,11 @@ class City extends Object{
     super(x, y);
   }
   
+  City(float x, float y, boolean destroyed) {
+    super(x, y);
+    this.destroyed = destroyed;
+  }
+  
   void display() {
     noStroke();
     fill(palette[14]);

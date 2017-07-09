@@ -1,7 +1,7 @@
 class Missile extends GameObject{
   float tx, ty; // target pos
   float sx, sy; // start pos
-  float sp = 1; // speed
+  float sp = 1.2+level*0.2; // speed
   int sender; // 0-base, 1-enemy
   
   Missile(float x, float y, float tx, float ty, int sender) {

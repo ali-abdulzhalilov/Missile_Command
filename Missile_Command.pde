@@ -1,6 +1,7 @@
 Scene scene;
 int level = 0;
 color[] palette;
+City[] cs;
 
 void setup() {
   size(600, 400);
@@ -25,6 +26,7 @@ void setup() {
   palette[15] = #B2DCEF; // cloudblue
   
   scene = new MenuScene();
+  scene.enter();
 }
 
 void draw() {
