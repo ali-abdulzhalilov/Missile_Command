@@ -23,13 +23,10 @@ class Base extends Object{
   
   void display() {
     noStroke();
-    fill(255, 127, 0);
-    quad(x+w/4, y-h,
-         x, y,
-         x+w, y,
-         x+w-w/4, y-h);
+    fill(palette[7]);
+    rect(x, y-h, w, h);
          
-    fill(0);
+    fill(palette[0]);
     textAlign(CENTER, CENTER);
     text(missiles, x+w/2, y-h/2);
   }

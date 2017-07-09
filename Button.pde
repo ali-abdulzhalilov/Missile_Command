@@ -33,13 +33,13 @@ class Button {
   void display() {
     noStroke();
     switch (state) {
-      case 0: fill(255, 20); break;
-      case 1: fill(255, 50); break;
-      case 2: fill(255, 100); break;
+      case 0: fill(palette[9]); break;
+      case 1: fill(palette[10]); break;
+      case 2: fill(palette[11]); break;
     }
     rect(x, y, w, h);
     
-    fill(255);
+    fill(palette[2]);
     textAlign(CENTER,CENTER);
     text(text, x+w/2, y+h/2);
   }

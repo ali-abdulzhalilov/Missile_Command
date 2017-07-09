@@ -17,7 +17,7 @@ class Enemy extends Object{
   void shoot() {
     if (fireTimer<=0) {
       GameScene s = (GameScene)scene;
-      s.objects.add(new Missile(random(width), 0, random(width), height, 1));
+      s.objects.add(new Missile(random(width), -5, random(width), height, 1));
       
       fireTimer = fireRate;
     }

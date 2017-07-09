@@ -33,14 +33,14 @@ class Missile extends GameObject{
   
   void display() {
     strokeWeight(2);
-    stroke(255);
+    stroke(palette[2]);
     float d = dist(x, y, tx, ty);
     float dx = ((tx-x)/d)*5;
     float dy = ((ty-y)/d)*5;
     line(x, y, x-dx, y-dy);
     
     if (sender == 0) {
-      stroke(random(255), random(125), 0);
+      stroke(palette[3]);
       strokeWeight(1);
       line(tx-3, ty-3, tx+3, ty+3);
       line(tx+3, ty-3, tx-3, ty+3);

@@ -1,5 +1,4 @@
 class GameScene extends Scene {
-  int level = 0;
   boolean wasShootPressed;
   float cursorX, cursorY;
   
@@ -11,7 +10,7 @@ class GameScene extends Scene {
   int currentBase = 0;
   
   boolean pause = false;
-  boolean wasPausePressed;
+  boolean wasPausePressed = true;
   PauseScene pScene;
   
   GameScene() {
@@ -109,7 +108,7 @@ class GameScene extends Scene {
   }
   
   void render() {
-    background(0);
+    background(palette[12]);
   
     for (int i = 0; i < renderOrder.length; i++) {
       Class someClass = renderOrder[i];
@@ -126,17 +125,16 @@ class GameScene extends Scene {
       cs[i].display();
       
     strokeWeight(1);
-    stroke(255);
+    stroke(palette[2]);
     line(mouseX, mouseY-5, mouseX, mouseY+5);
     line(mouseX-5, mouseY, mouseX+5, mouseY);
     
     float d = 8, d1 = 4;
     noFill();
-    stroke(127);
+    stroke(palette[1]);
     line(cursorX+d, cursorY-d, cursorX+d, cursorY+d);
     line(cursorX+d, cursorY-d, cursorX+d-d1, cursorY-d);
     line(cursorX+d, cursorY+d, cursorX+d-d1, cursorY+d);
-    stroke(200);
     line(cursorX-d, cursorY-d, cursorX-d, cursorY+d);
     line(cursorX-d, cursorY-d, cursorX-d+d1, cursorY-d);
     line(cursorX-d, cursorY+d, cursorX-d+d1, cursorY+d);

@@ -29,7 +29,7 @@ class Explosion extends GameObject{
     if (doHit) {
       for (int i=0; i<s.cs.length; i++)
         if (dist(x, y, s.cs[i].x, s.cs[i].y) < r/2) {
-          s.cs[i].takeDamage();
+          s.cs[i].destroyed = true;
           doHit = false;
         }
     }
@@ -37,7 +37,7 @@ class Explosion extends GameObject{
   
   void display() {
     noStroke();
-    fill(255, r/R*255, r/R*50, (1-pow(r/R,4))*255);
+    fill(r/R < 0.5 ? palette[3] : (r/R <0.8 ? palette[7] : palette[8]));
     ellipse(x, y, r, r);
   }
 }

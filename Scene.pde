@@ -3,7 +3,11 @@ class Scene {
   
   void enter() {}
   
-  void loop() {}
+  void loop() {
+    input();
+    update();
+    render();
+  }
   
   void input() {}
   

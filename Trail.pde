@@ -28,14 +28,17 @@ class Trail extends GameObject{
   }
   
   void display() {
-    strokeWeight(2);
-    for (int i = 0; i < trail.length-1; i++){
-      float k = (i/float(trail.length));
-      if (sender==0)
-        stroke(255,127*k,0, 255*(1-k));
-      else
-        stroke(0,127*k,255, 255*(1-k));
-      line(trail[i].x, trail[i].y, trail[i+1].x, trail[i+1].y);
+    noStroke();
+    for (int i = trail.length - 1; i >= 0; i--){
+      float r = i/float(trail.length);
+      float size = 2 + 10*r;
+      if (trail[i].x!=trail[0].x&&trail[i].y!=trail[0].y) {
+        if (sender == 0)
+          fill(palette[7], r*127);
+        else
+          fill(palette[13], r*127);
+      } else fill(0, 0);
+      ellipse(trail[i].x, trail[i].y, size, size);
     }
   }
 }
