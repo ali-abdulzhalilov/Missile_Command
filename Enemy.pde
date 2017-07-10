@@ -1,46 +1,63 @@
 class Enemy extends Object{
   int waveCount;
   int missilesPerWave = 5;
-  float ot, fireRate = 10-level*1, fireTimer = 0;
+  float fireRate = 10-level*1;
+  Timer fireTimer;
   ArrayList<PVector> targets;
   
-  Enemy(int waveCount, int missilesPerWave) {
+  Enemy(int wCount, int mPerWave) {
     super(0, 0);
-    this.waveCount = waveCount;
-    this.missilesPerWave = missilesPerWave;
-    this.ot = millis();
+    waveCount = wCount;
+    missilesPerWave = mPerWave;
+    fireTimer = new Timer();
+    fireTimer.start(fireRate);
     
     targets = new ArrayList<PVector>();
   }
   
   void update() {
-    if (targets.size() == 0) {
-      GameScene s = (GameScene)scene;
-      boolean[] inTargets = new boolean[cs.length];
-      for (int i=0; i<inTargets.length; i++) inTargets[i]=false;
-      while (targets.size() < 5) {
-        int r = floor(random(cs.length));
-        if (!inTargets[r]) {
-          inTargets[r] = true;
-          targets.add(new PVector(cs[r].x+cs[r].w/2, cs[r].y+cs[r].h/2));
-          println(r);
-        }
-      }
-      targets.add(new PVector(s.bs[0].x+s.bs[0].w/2, s.bs[0].y+s.bs[0].h/2));
-      targets.add(new PVector(s.bs[1].x+s.bs[1].w/2, s.bs[1].y+s.bs[1].h/2));
-      targets.add(new PVector(s.bs[2].x+s.bs[2].w/2, s.bs[2].y+s.bs[2].h/2));
-    }
+    //if (targets.size() == 0) {
+    //  findTargets(2, 5);
+    //}
     
-    if (fireTimer<=0 && waveCount>=0) {
+    if (fireTimer.currentTime()>=fireRate && waveCount>=0) {
       newWave();
-      fireTimer = fireRate;
+      fireTimer.restart();
+    }
+  }
+  
+  void findTargets(int baseCount, int cityCount) {
+    GameScene s = (GameScene)scene; 
+    baseCount = baseCount<0 ? 0 : (baseCount>s.bs.length ? s.bs.length : baseCount); // check and fix
+    cityCount = cityCount<0 ? 0 : (cityCount>  cs.length ?   cs.length : cityCount); // possible overflows
+    
+    print(level + " c:");
+    boolean[] inTargets = new boolean[cs.length]; for (int i=0; i<inTargets.length; i++) inTargets[i]=false;
+    while (targets.size() < cityCount) {
+      int r = floor(random(cs.length));
+      if (!inTargets[r]) {
+        inTargets[r] = true;
+        targets.add(new PVector(cs[r].x+cs[r].w/2, cs[r].y+cs[r].h/2));
+        print(r);
+      }
     }
     
-    fireTimer -= (millis() - ot) / 1000;
-    ot = millis();
+    print(" b:");
+    inTargets = new boolean[s.bs.length]; for (int i=0; i<inTargets.length; i++) inTargets[i]=false;
+    while (targets.size() < cityCount+baseCount) {
+      int r = floor(random(s.bs.length));
+      if (!inTargets[r]) {
+        inTargets[r] = true;
+        targets.add(new PVector(s.bs[r].x+s.bs[r].w/2, s.bs[r].y+s.bs[r].h/2));
+        print(r);
+      }
+    }
+    
+    println();
   }
   
   void newWave() {
+    findTargets(2, 5);
     for (int i=0; i<missilesPerWave; i++) {
       GameScene s = (GameScene)scene;
       int t =  floor(random(targets.size()));

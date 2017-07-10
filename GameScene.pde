@@ -13,6 +13,9 @@ class GameScene extends Scene {
   boolean wasPausePressed = true;
   PauseScene pScene;
   
+  Timer nextTimer;
+  float waitToNext = 1;
+  
   GameScene() {
     super();
     noCursor();
@@ -24,24 +27,12 @@ class GameScene extends Scene {
     bs[1] = new Base((width-50)/2, height);
     bs[2] = new Base(width-50, height);
     
-    if (level==0) {
-      cs = new City[6];
-      cs[0] = new City((width-20)*0.175, height);
-      cs[1] = new City((width-20)*0.275, height);
-      cs[2] = new City((width-20)*0.375, height);
-      cs[3] = new City((width-20)*0.625, height);
-      cs[4] = new City((width-20)*0.725, height);
-      cs[5] = new City((width-20)*0.825, height);
-    }
-    
     pScene = new PauseScene(this);
     e = new Enemy(1+level/2, 5+level);
     
-    if (scene!=null) scene.exit(); // if there is old scene, let it perform exit action
-  }
-  
-  void enter() {
+    nextTimer = new Timer();
     
+    if (scene!=null) scene.exit(); // if there is old scene, let it perform exit action
   }
   
   void loop() {
@@ -109,11 +100,21 @@ class GameScene extends Scene {
       }
     }
     
-    int missileCount = 0;
-    for (int i=0; i<objects.size(); i++) if (objects.get(i).getClass() == Missile.class) missileCount++;
-    if (e.waveCount < 0 && missileCount <= 0) {
-      level++;
-      scene = new GameScene();
+    if (!nextTimer.running) {
+      int missileCount = 0;
+      for (int i=0; i<objects.size(); i++) if (objects.get(i).getClass() == Missile.class) missileCount++;
+      if (e.waveCount <= 0 && missileCount <= 0) {
+        nextTimer.start();
+      }
+    } else if (nextTimer.currentTime() >= waitToNext) {
+      int cityCount = 0;
+      for (int i=0; i<cs.length; i++) if (!cs[i].destroyed) cityCount++;
+      if (cityCount == 0) 
+        scene = new MenuScene(); 
+      else {
+        level++;
+        scene = new GameScene();
+      }
     }
   }
   
@@ -149,8 +150,6 @@ class GameScene extends Scene {
     line(cursorX-d, cursorY-d, cursorX-d+d1, cursorY-d);
     line(cursorX-d, cursorY+d, cursorX-d+d1, cursorY+d);
   }
-  
-  void exit() {}
   
   int closestAviableBaseIndex(float x, float y) {
     float d = 2147483647;

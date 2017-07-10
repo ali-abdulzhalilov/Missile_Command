@@ -1,6 +1,5 @@
-class PauseScene {
-  float t = 0;
-  float ot;
+class PauseScene extends Scene{
+  Timer blipTimer;
   final GameScene owner;
   PImage gameScreen;
   boolean wasPausePressed;
@@ -10,6 +9,8 @@ class PauseScene {
   PauseScene(GameScene owner) {
     super();
     this.owner = owner;
+    
+    blipTimer = new Timer();
     
     bs = new Button[3];
     ButtonCallback bc0 = new BaseButtonCallback(){void execute(){unpause();}};
@@ -21,8 +22,7 @@ class PauseScene {
   }
   
   void enter() {
-    t = 0;
-    ot = millis();
+    blipTimer.start();
     gameScreen = get();
     cursor(ARROW);
   }
@@ -53,11 +53,6 @@ class PauseScene {
     println("BLOP");
   }
   
-  void update() {
-    t += (millis() - ot) / 1000;
-    ot = millis();
-  }
-  
   void render() {
     image(gameScreen, 0, 0);
     noStroke();
@@ -68,7 +63,7 @@ class PauseScene {
     for (int i=0; i<bs.length; i++)
       bs[i].display();
     
-    if (floor(t)%2==0) {
+    if (floor((int)blipTimer.currentTime())%2==0) {
       fill(palette[2]);
       textAlign(CENTER, CENTER);
       text("PAUSE", width/2, height/2-50);
